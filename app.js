@@ -22,33 +22,24 @@ app.set('view engine', 'ejs');
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 
-
 const Message = require('./models/Message');
-
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
-
-
   Message.find().limit(20).sort({ timestamp: 1 }).then(messages => {
     socket.emit('load messages', messages);
   });
-
   socket.on('chat message', async (data) => {
     const newMessage = new Message({
       username: data.username,
       message: data.message,
     });
     await newMessage.save();
-
     io.emit('chat message', newMessage); // broadcast to all
   });
-
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
 });
-
-
 const PORT = process.env.PORT || 8080;
 http.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
