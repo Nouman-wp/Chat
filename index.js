@@ -4,7 +4,6 @@ router.get('/', (req, res) => {
   res.render('index');
 });
 
-
 router.post('/chat', (req, res) => {
   const { username } = req.body;
   if (!username || username.trim() === '') {
@@ -12,5 +11,4 @@ router.post('/chat', (req, res) => {
   }
   res.render('chat', { username });
 });
-
 module.exports = router;
