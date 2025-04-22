@@ -46,6 +46,35 @@ io.on('connection', (socket) => {
     console.log('User disconnected:', socket.id);
   });
 });
+
+
+app.use(session({
+  secret: 'thisisasecretchatkey',
+  resave: false,
+  saveUninitialized: false
+}));
+
+
+app.use(flash());
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
+  next();
+});
+
+
+
 const PORT = process.env.PORT || 8080;
 http.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
