@@ -73,6 +73,8 @@ app.use((req, res, next) => {
   next();
 });
 
+const authRoutes = require('./routes/auth');
+app.use(authRoutes);
 
 
 const PORT = process.env.PORT || 8080;
