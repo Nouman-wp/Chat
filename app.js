@@ -56,6 +56,11 @@ app.use(session({
   saveUninitialized: false
 }));
 
+app.get('/chat', isLoggedIn, (req, res) => {
+  res.render('chat', { username: req.user.username });
+});
+
+
 
 app.use(flash());
 
