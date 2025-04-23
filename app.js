@@ -10,6 +10,8 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/User');
+const { isLoggedIn } = require('./middleware');
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/chatApp', {
   useNewUrlParser: true,
