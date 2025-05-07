@@ -13,6 +13,8 @@ const User = require('./models/User');
 const { isLoggedIn } = require('./middleware');
 const indexRouter = require('./routes/index');
 const Message = require('./models/Message');
+const authRoutes = require('./routes/auth');
+
 mongoose.connect('mongodb://127.0.0.1:27017/chatApp', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -110,7 +112,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const authRoutes = require('./routes/auth');
+
 app.use(authRoutes);
 
 
