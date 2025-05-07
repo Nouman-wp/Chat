@@ -60,6 +60,36 @@ app.get('/chat', isLoggedIn, (req, res) => {
   res.render('chat', { username: req.user.username });
 });
 
+const Message = require('./models/Message'); 
+
+io.on('connection', (socket) => {
+  console.log('🔗 New user connected!');
+
+
+  Message.find()
+    .sort({ timestamp: 1 })
+    .limit(100)
+    .then(messages => {
+      socket.emit('load messages', messages);
+    })
+    .catch(err => console.error(err));
+
+
+  socket.on('chat message', async (data) => {
+    const { username, message } = data;
+
+
+    const newMessage = new Message({ username, message });
+    await newMessage.save();
+
+   
+    io.emit('chat message', { username, message });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('❌ User disconnected.');
+  });
+});
 
 
 app.use(flash());
