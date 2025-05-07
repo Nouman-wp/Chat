@@ -11,8 +11,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/User');
 const { isLoggedIn } = require('./middleware');
-
-
+const indexRouter = require('./routes/index');
+const Message = require('./models/Message');
 mongoose.connect('mongodb://127.0.0.1:27017/chatApp', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -27,10 +27,10 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 
-const indexRouter = require('./routes/index');
+
 app.use('/', indexRouter);
 
-const Message = require('./models/Message');
+
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
   Message.find().limit(20).sort({ timestamp: 1 }).then(messages => {
